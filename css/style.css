@@ -1,3 +1,40 @@
 body {
     text-align: center;
+    font-size: 10px;
+    font-family: 'Titillium Web', Arial, sans-serif;
+    /*Background from Subtle Patterns**/
+    background-image: url(../images/lighthex.png);
+}
+
+h1 {
+  margin: 0;
+  font-size: 4rem;
+  line-height: 4rem;
+  font-weight: bold;
+  padding: 15px 0 5px 0;
+}
+
+p, div {
+  margin: 0;
+  font-size: 1.4rem;
+  line-height: 1.4rem;
+}
+ p {
+   color: #5269d3;
+ }
+
+div {
+  padding-top: 7px;
+}
+
+#wins {
+  margin-right: 15px;
+  color: #4caf50;
+}
+
+#loses {
+  color: #d60000;
+}
+canvas {
+  margin-top: -20px;
 }

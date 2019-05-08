@@ -1,9 +1,14 @@
+let loses = 0;
+let wins = 0;
+
+const winSpan = document.querySelector('#wins');
+const lossSpan = document.querySelector('#loses');
+
 // Enemies our player must avoid
 var Enemy = function(x, y, speed, sprite) {
     this.x = x;
     this.y = y;
     this.speed = speed;
-    //this.sprite = 'images/enemy-bug.png';
     this.sprite = sprite;
 };
 
@@ -56,26 +61,32 @@ Player.prototype.handleInput = function(key) {
     }
     //console.log(this.x + " " + this.y );
     //check if at water & is safe
-    if (this.y <0) {
+    if (this.y < 0) {
       console.log("at water");
-      //***add a reset
-      //***add a WIN Score
+    //  alert("Congratulations!");
+      wins += 1;
+      resetPositions();
+      console.log(wins);
+      winSpan.textContent = wins;
     }
-
-    //checkCollisions
-    //checkCollisions(this.x, this.y);
-
 
 };
 
 function checkCollisions(x,y) {
   //verify x & y against each enemy's x & y.
-  /*for (var ladybug of allEnemies) {
-    console.log(ladybug.x + ", " + ladybug.y);
-  }*/
-  //console.log(x + ", " + y);
 
+  if (player.x >= (x-50) && player.x <= (x+50) && player.y >= (y-20) && player.y <= (y+20)) {
+    //alert("Oh NO!!!!");
+    loses -= 1;
+    lossSpan.textContent = loses * -1;
+    resetPositions();
+  }
 };
+
+function resetPositions() {
+  player.x = 200;
+  player.y = 400;
+}
 
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
@@ -84,6 +95,10 @@ function checkCollisions(x,y) {
 let allEnemies = [new Enemy(100, 220, 120, "images/enemy-bug-purple.png"), new Enemy(200, 140, 150, "images/enemy-bug-blue.png"), new Enemy(0, 55, 250, "images/enemy-bug-green.png")];
 let player = new Player(200,400);
 
+
+//const scoreSpan = document.querySelector('#deck');
+//const winSpan = document.querySelector('#wins');
+//const lossSpan = document.querySelector('#loses');
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
