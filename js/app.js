@@ -3,11 +3,12 @@ let loses = 0;
 let wins = 0;
 
 //variable to enable or disable movement when modals are open.
-let enable = false;
+let enable = true;
 
 //saving html spots
 const winSpan = document.querySelector('#wins');
 const lossSpan = document.querySelector('#loses');
+const modalP = document.querySelector('#modalText');
 
 // Enemies our player must avoid
 var Enemy = function(x, y, speed, sprite) {
@@ -20,8 +21,9 @@ var Enemy = function(x, y, speed, sprite) {
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
 Enemy.prototype.update = function(dt) {
+  if (enable) {
     this.x < 500 ? this.x += this.speed * dt : this.x = -100;
-
+  }
     //check for collitions
     checkCollisions(this.x, this.y);
 };
@@ -47,38 +49,40 @@ Player.prototype.render = function() {
 };
 
 Player.prototype.handleInput = function(key) {
-    //console.log(key);
-    //console.log(this.x + " " + this.y );
-    if (key == "left" && this.x > 0) {
-      this.x -= 100;
-    }
-    if (key == "right" && this.x < 400) {
-        this.x += 100;
-    }
-    if (key == "up" &&  this.y > 0) {
-      this.y -= 85;
-    }
-    if (key == "down" &&  this.y < 400) {
-      this.y += 85;
-    }
+    //only moves if enabled.
+    if (enable) {
+      if (key == "left" && this.x > 0) {
+        this.x -= 100;
+      }
+      if (key == "right" && this.x < 400) {
+          this.x += 100;
+      }
+      if (key == "up" &&  this.y > 0) {
+        this.y -= 85;
+      }
+      if (key == "down" &&  this.y < 400) {
+        this.y += 85;
+      }
 
     //check if player is at water & is safe
     if (this.y < 0) {
-      console.log("at water");
       wins += 1;
-      resetPositions();
-      console.log(wins);
       winSpan.textContent = wins;
-    }
 
+      //Opens modal and disables game
+      OpenModal("Congratulations!!!", "loss", "congrats");
+    }
+  }
 };
 
 function checkCollisions(x,y) {
   //verify x & y against each enemy's x & y.
-  if (player.x >= (x-50) && player.x <= (x+50) && player.y >= (y-20) && player.y <= (y+20)) {
+  if (player.x >= (x-50) && player.x <= (x+50) && player.y >= (y-20) && player.y <= (y+20) && enable) {
     loses -= 1;
     lossSpan.textContent = loses * -1;
-    resetPositions();
+
+    //Opens modal and disables game
+    OpenModal("Oh NO!!!", "congrats", "loss");
   }
 };
 
@@ -103,3 +107,39 @@ document.addEventListener('keyup', function(e) {
     };
     player.handleInput(allowedKeys[e.keyCode]);
 });
+
+//Opens modal window, updates message, disables game
+function OpenModal(message, remove, add) {
+  enable = false;
+  modal.style.display = "block";
+  modalP.textContent = message;
+  modalP.classList.remove(remove);
+  modalP.classList.add(add);
+}
+
+// MODAL functions
+// Get the modal
+var modal = document.getElementById('myModal');
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+  modal.style.display = "none";
+
+  //reset positions and enables game again
+  enable = true;
+  resetPositions();
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+
+    //reset positions and enables game again
+    enable = true;
+    resetPositions();
+  }
+}
